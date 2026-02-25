@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         <SidebarProvider>
           <UserSidebar />
-          <SidebarTrigger />
+          <SidebarTrigger className="hidden lg:block" />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
