@@ -1,3 +1,11 @@
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/src/components/ui/alert-dialog'
 import { Button } from '@/src/components/ui/button'
 import {
   Popover,
@@ -8,6 +16,7 @@ import {
   PopoverTrigger,
 } from '@/src/components/ui/popover'
 import { BookOpenText, Ellipsis, Pen, Trash } from 'lucide-react'
+import { useState } from 'react'
 
 interface BoardActionPopoverProps {
   title: string
@@ -20,6 +29,8 @@ export default function BoardActionPopover({
   id,
   removeBoard,
 }: BoardActionPopoverProps) {
+  const [isOpenRemoveDialog, setIsOpenRemoveDialog] = useState(false)
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -35,9 +46,36 @@ export default function BoardActionPopover({
           <Button>
             <BookOpenText /> Edit words
           </Button>
+          <AlertDialog
+            open={isOpenRemoveDialog}
+            onOpenChange={setIsOpenRemoveDialog}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogDescription>
+                Are you sure you want to delete the board?
+              </AlertDialogDescription>
+              <AlertDialogFooter>
+                <Button
+                  className="bg-primary/40 hover:bg-primary/70"
+                  onClick={() => setIsOpenRemoveDialog(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => removeBoard(id)}
+                  variant="destructive"
+                >
+                  Remove
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <Button
             variant="destructive"
-            onClick={() => removeBoard(id)}
+            onClick={() => setIsOpenRemoveDialog(!isOpenRemoveDialog)}
           >
             <Trash /> Delete board
           </Button>
