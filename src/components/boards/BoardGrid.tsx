@@ -3,6 +3,7 @@
 import BoardsItem from '@/src/components/boards/BoardsItem'
 import BoardSkeleton from '@/src/components/boards/BoardSkeleton'
 import NewBoardItem from '@/src/components/boards/NewBoardItem'
+import CreateBoardDialog from '@/src/components/dialog/CreateBoardDialog'
 import { IBoard } from '@/src/models'
 import { BoardsService } from '@/src/service'
 import { useEffect, useState } from 'react'
@@ -45,6 +46,10 @@ export default function BoardGrid() {
     }
   }
 
+  function onCreateBoard(board: IBoard) {
+    setBoards(prevState => [...prevState, board])
+  }
+
   useEffect(() => {
     void getBoards()
   }, [])
@@ -64,7 +69,10 @@ export default function BoardGrid() {
               deleteBoard={() => removeBoard(board.id)}
             />
           ))}
-          <NewBoardItem addBoard={() => console.log('add board')} />
+          <CreateBoardDialog
+            onCreateBoard={newBoard => onCreateBoard(newBoard)}
+          />
+          {/*<NewBoardItem addBoard={() => console.log('add board')} />*/}
         </>
       )}
     </div>

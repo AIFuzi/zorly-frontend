@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function BoardsPage() {
   return (
-    <Container className="mt-4 h-[909000px]">
+    <Container className="mt-4">
       <BoardTitle />
       <BoardGrid />
     </Container>
