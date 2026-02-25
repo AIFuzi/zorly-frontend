@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from '@/src/components/ui/popover'
 import { BookOpenText, Ellipsis, Pen, Trash } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 
 interface BoardActionPopoverProps {
@@ -44,7 +45,12 @@ export default function BoardActionPopover({
             <Pen /> Edit board info
           </Button>
           <Button>
-            <BookOpenText /> Edit words
+            <Link
+              href={`/boards/${id}`}
+              className="flex items-center gap-x-2"
+            >
+              <BookOpenText /> Edit words
+            </Link>
           </Button>
           <AlertDialog
             open={isOpenRemoveDialog}

@@ -8,6 +8,10 @@ export class BoardsService {
     return await api.get('/board')
   }
 
+  static async getOneBoard(id: string): Promise<AxiosResponse<IBoard>> {
+    return await api.get(`/board/${id}`)
+  }
+
   static async deleteBoard(boardId: string) {
     return await api.delete(`/board/delete/${boardId}`)
   }

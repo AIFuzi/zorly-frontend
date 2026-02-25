@@ -31,7 +31,7 @@ export function NavMain({ items }: Props) {
         <SidebarMenu>
           {items.map(item => (
             <Link
-              href={item.url}
+              href={`/${item.url}`}
               key={item.title}
             >
               <SidebarMenuItem>
