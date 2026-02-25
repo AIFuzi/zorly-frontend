@@ -6,6 +6,7 @@ import NewBoardItem from '@/src/components/boards/NewBoardItem'
 import { IBoard } from '@/src/models'
 import { BoardsService } from '@/src/service'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 export default function BoardGrid() {
   const [isLoading, setIsLoading] = useState(true)
@@ -28,6 +29,22 @@ export default function BoardGrid() {
     }
   }
 
+  async function removeBoard(boardId: string) {
+    try {
+      await BoardsService.deleteBoard(boardId)
+
+      toast.success('Success', {
+        description: `Board successfully deleted.`,
+      })
+
+      setBoards(boards.filter(b => b.id !== boardId))
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error('Error', { description: e.message })
+      }
+    }
+  }
+
   useEffect(() => {
     void getBoards()
   }, [])
@@ -44,6 +61,7 @@ export default function BoardGrid() {
             <BoardsItem
               key={board.id}
               boardInfo={board}
+              deleteBoard={() => removeBoard(board.id)}
             />
           ))}
           <NewBoardItem addBoard={() => console.log('add board')} />

@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import '@/src/assets/styles/globals.css'
+import Header from '@/src/components/header/Header'
 import UserSidebar from '@/src/components/sidebar/UserSidebar'
 import { ThemeProvider } from '@/src/components/theme-provider'
 import { SidebarProvider, SidebarTrigger } from '@/src/components/ui/sidebar'
+import { Toaster } from '@/src/components/ui/sonner'
+import { TooltipProvider } from '@/src/components/ui/tooltip'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,14 +38,18 @@ export default function RootLayout({
       >
         <SidebarProvider>
           <UserSidebar />
-          <SidebarTrigger className="hidden lg:block" />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            {/*<div className="flex w-full flex-col">*/}
+            {/*  <Header />*/}
+            {/*</div>*/}
+            <SidebarTrigger className="hidden lg:block" />
+            <TooltipProvider>{children}</TooltipProvider>
+            <Toaster />
           </ThemeProvider>
         </SidebarProvider>
       </body>

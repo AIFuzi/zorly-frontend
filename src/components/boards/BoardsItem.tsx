@@ -1,23 +1,28 @@
+import BoardActionPopover from '@/src/components/boards/BoardActionPopover'
 import { Button } from '@/src/components/ui/button'
 import { Progress } from '@/src/components/ui/progress'
 import { IBoard } from '@/src/models'
-import { Ellipsis, Globe, Play } from 'lucide-react'
+import { Globe, Play } from 'lucide-react'
 import { CSSProperties } from 'react'
 
 interface BoardsItemProps {
   boardInfo: IBoard
+  deleteBoard: (boardId: string) => void
 }
 
-export default function BoardsItem({ boardInfo }: BoardsItemProps) {
+export default function BoardsItem({
+  boardInfo,
+  deleteBoard,
+}: BoardsItemProps) {
   // eslint-disable-next-line react-hooks/purity
   const accuracy = Math.floor(Math.random() * 100)
 
   return (
     <div
-      className="bg-secondary w-full cursor-default rounded-xl border p-4 transition-colors hover:border-(--boarder-color-hover)"
+      className="bg-secondary w-full cursor-default rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:border-(--boarder-color-hover)"
       style={
         {
-          '--boarder-color-hover': `#${boardInfo.boardColor}CC`,
+          '--boarder-color-hover': `#${boardInfo.boardColor}50`,
         } as CSSProperties
       }
     >
@@ -32,9 +37,11 @@ export default function BoardsItem({ boardInfo }: BoardsItemProps) {
               style={{ color: `#${boardInfo.boardColor}` }}
             />
           </div>
-          <Button variant={'ghost'}>
-            <Ellipsis />
-          </Button>
+          <BoardActionPopover
+            removeBoard={() => deleteBoard(boardInfo.id)}
+            id={boardInfo.id}
+            title={boardInfo.title}
+          />
         </div>
         <div className="flex flex-col">
           <h1 className="text-xl font-bold">{boardInfo.title}</h1>
