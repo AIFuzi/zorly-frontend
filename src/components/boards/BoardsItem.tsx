@@ -19,7 +19,7 @@ export default function BoardsItem({
 
   return (
     <div
-      className="bg-secondary w-full cursor-default rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:border-(--boarder-color-hover)"
+      className="bg-card w-full cursor-default rounded-xl border p-4 transition-all hover:-translate-y-0.5 hover:border-(--boarder-color-hover)"
       style={
         {
           '--boarder-color-hover': `#${boardInfo.boardColor}50`,

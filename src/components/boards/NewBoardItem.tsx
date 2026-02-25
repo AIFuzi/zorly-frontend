@@ -11,7 +11,7 @@ export default function NewBoardItem({ addBoard }: NewBoardProps) {
       onClick={() => addBoard()}
     >
       <div className="flex h-full flex-col items-center justify-center space-y-4">
-        <div className="bg-secondary group-hover:bg-primary/20 text-primary rounded-full p-4 transition-colors">
+        <div className="bg-card group-hover:bg-primary/20 text-primary rounded-full p-4 transition-colors">
           <Plus />
         </div>
         <div className="text-center">

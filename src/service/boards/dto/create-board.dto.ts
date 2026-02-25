@@ -1,9 +1,9 @@
 export interface CreateBoardDto {
   title: string
-  description: string
+  description?: string
   isPublic: boolean
   languageFrom: string
   languageTo: string
-  tags: string[]
+  tags?: string[]
   boardColor: string
 }

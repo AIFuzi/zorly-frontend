@@ -4,7 +4,7 @@ import '@/src/assets/styles/globals.css'
 import Header from '@/src/components/header/Header'
 import UserSidebar from '@/src/components/sidebar/UserSidebar'
 import { ThemeProvider } from '@/src/components/theme-provider'
-import { SidebarProvider, SidebarTrigger } from '@/src/components/ui/sidebar'
+import { SidebarProvider } from '@/src/components/ui/sidebar'
 import { Toaster } from '@/src/components/ui/sonner'
 import { TooltipProvider } from '@/src/components/ui/tooltip'
 
@@ -44,11 +44,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {/*<div className="flex w-full flex-col">*/}
-            {/*  <Header />*/}
-            {/*</div>*/}
-            <SidebarTrigger className="hidden lg:block" />
-            <TooltipProvider>{children}</TooltipProvider>
+            <div className="flex w-full flex-col">
+              <Header />
+              <TooltipProvider>{children}</TooltipProvider>
+            </div>
             <Toaster />
           </ThemeProvider>
         </SidebarProvider>

@@ -1,3 +1,5 @@
+'use client'
+
 import Container from '@/src/components/Container'
 import { Avatar, AvatarFallback, AvatarImage } from '@/src/components/ui/avatar'
 import { Button } from '@/src/components/ui/button'
@@ -10,17 +12,47 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/src/components/ui/dropdown-menu'
-import { SidebarTrigger } from '@/src/components/ui/sidebar'
-import { ChevronDown } from 'lucide-react'
+import { SidebarTrigger, useSidebar } from '@/src/components/ui/sidebar'
+import { Switch } from '@/src/components/ui/switch'
+import {
+  ChevronDown,
+  PanelLeft,
+  PanelRightClose,
+  PanelRightOpen,
+} from 'lucide-react'
 
 interface HeaderProps {}
 
 export default function Header({}: HeaderProps) {
+  const { open, toggleSidebar } = useSidebar()
+
   return (
-    <header className="bg-sidebar/70 sticky top-0 z-10 h-12 w-full border-b backdrop-blur-sm">
-      <div className="m-auto flex h-full w-[90%] items-center justify-between">
-        <SidebarTrigger className="hidden lg:block" />
-        <DropdownMenu>
+    <header className="sticky top-0 z-10 h-12 w-full">
+      <div className="ml-2 flex h-full items-center justify-between">
+        <div className="flex items-center gap-x-4">
+          {/*<SidebarTrigger className="hidden lg:block" />*/}
+          <div
+            className="hover:bg-primary/30 cursor-pointer rounded-lg border p-1.5 transition-colors"
+            onClick={() => toggleSidebar()}
+          >
+            {open ? (
+              <PanelRightOpen size={22} />
+            ) : (
+              <PanelRightClose size={22} />
+            )}
+          </div>
+          {/*<div className="relative flex items-center">*/}
+          {/*  <Switch />*/}
+          {/*</div>*/}
+        </div>
+      </div>
+    </header>
+  )
+}
+
+/*
+
+    <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost">
               <Avatar>
@@ -44,7 +76,6 @@ export default function Header({}: HeaderProps) {
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
-    </header>
-  )
-}
+
+
+ */
