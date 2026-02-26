@@ -3,6 +3,7 @@ import { Button } from '@/src/components/ui/button'
 import { Progress } from '@/src/components/ui/progress'
 import { IBoard } from '@/src/models'
 import { Globe, Play } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { CSSProperties } from 'react'
 
 interface BoardsItemProps {
@@ -14,6 +15,8 @@ export default function BoardsItem({
   boardInfo,
   deleteBoard,
 }: BoardsItemProps) {
+  const router = useRouter()
+
   // eslint-disable-next-line react-hooks/purity
   const accuracy = Math.floor(Math.random() * 100)
 
@@ -84,6 +87,7 @@ export default function BoardsItem({
           />
         </div>
         <Button
+          onClick={() => router.push(`/training/${boardInfo.id}`)}
           className="bg-(--board-color) transition-colors hover:bg-(--board-color-hover)"
           style={
             {

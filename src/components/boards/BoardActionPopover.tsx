@@ -46,7 +46,7 @@ export default function BoardActionPopover({
           </Button>
           <Button>
             <Link
-              href={`/boards/${id}`}
+              href={`/src/app/(dashboard)/boards/${id}`}
               className="flex items-center gap-x-2"
             >
               <BookOpenText /> Edit words

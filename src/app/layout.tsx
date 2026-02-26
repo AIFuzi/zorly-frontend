@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import '@/src/assets/styles/globals.css'
-import Header from '@/src/components/header/Header'
-import UserSidebar from '@/src/components/sidebar/UserSidebar'
 import { ThemeProvider } from '@/src/components/theme-provider'
 import { SidebarProvider } from '@/src/components/ui/sidebar'
 import { Toaster } from '@/src/components/ui/sonner'
@@ -37,7 +35,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SidebarProvider>
-          <UserSidebar />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -45,7 +42,6 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <div className="flex w-full flex-col">
-              <Header />
               <TooltipProvider>{children}</TooltipProvider>
             </div>
             <Toaster />

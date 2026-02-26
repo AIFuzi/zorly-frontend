@@ -10,8 +10,6 @@ export default function Container({
   className,
 }: PropsWithChildren<ContainerProps>) {
   return (
-    <div className={cn('mr-auto mb-20 ml-auto w-[80%]', className)}>
-      {children}
-    </div>
+    <div className={cn('mr-auto ml-auto w-[80%]', className)}>{children}</div>
   )
 }

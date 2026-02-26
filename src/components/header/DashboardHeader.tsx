@@ -23,7 +23,7 @@ import {
 
 interface HeaderProps {}
 
-export default function Header({}: HeaderProps) {
+export default function DashboardHeader({}: HeaderProps) {
   const { open, toggleSidebar } = useSidebar()
 
   return (
