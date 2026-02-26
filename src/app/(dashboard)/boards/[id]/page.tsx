@@ -3,6 +3,7 @@ import EditWordsHeader from '@/src/components/words/EditWordsHeader'
 import EditWordsPagination from '@/src/components/words/EditWordsPagination'
 import WordsParams from '@/src/components/words/WordsParams'
 import WordsTable from '@/src/components/words/WordsTable'
+import WordWrapper from '@/src/components/words/WordWrapper'
 import { BoardsService } from '@/src/service'
 import { Metadata } from 'next'
 
@@ -45,8 +46,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <Container className="space-y-6">
       <EditWordsHeader title={response.data.title} />
-      <WordsParams />
-      <WordsTable boardId={response.data.id} />
+      <WordWrapper boardId={response.data.id} />
       <EditWordsPagination />
     </Container>
   )

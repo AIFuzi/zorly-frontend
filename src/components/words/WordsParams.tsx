@@ -1,15 +1,20 @@
-import { Button } from '@/src/components/ui/button'
+import CreateWordDialog from '@/src/components/dialog/CreateWordDialog'
 import { Input } from '@/src/components/ui/input'
-import { Plus, Search } from 'lucide-react'
+import { IWord } from '@/src/models'
+import { Search } from 'lucide-react'
 
-interface WordsParamsProps {}
+interface WordsParamsProps {
+  boardId: string
+  newWord: (word: IWord) => void
+}
 
-export default function WordsParams({}: WordsParamsProps) {
+export default function WordsParams({ boardId, newWord }: WordsParamsProps) {
   return (
     <div className="flex items-center gap-x-4">
-      <Button>
-        <Plus /> add words
-      </Button>
+      <CreateWordDialog
+        boardId={boardId}
+        newWord={word => newWord(word)}
+      />
       <div className="relative">
         <Input
           autoComplete="off"

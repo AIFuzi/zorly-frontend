@@ -18,9 +18,10 @@ import { toast } from 'sonner'
 
 interface WordsTableProps {
   boardId: string
+  newWord: IWord
 }
 
-export default function WordsTable({ boardId }: WordsTableProps) {
+export default function WordsTable({ boardId, newWord }: WordsTableProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [words, setWords] = useState<IWord[]>([])
 
@@ -42,6 +43,10 @@ export default function WordsTable({ boardId }: WordsTableProps) {
   useEffect(() => {
     void getWords()
   }, [])
+
+  useEffect(() => {
+    setWords(prev => [...prev, newWord])
+  }, [newWord])
 
   return (
     <Table className="bg-card">
