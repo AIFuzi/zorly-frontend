@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Page({}: PageProps) {
   return (
     <Container>
-      <div className="m-auto w-2/4">
+      <div className="m-auto lg:w-2/4">
         <div className="space-y-4">
           <SessionProgress />
           <QuestionBoard />

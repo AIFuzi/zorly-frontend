@@ -19,11 +19,9 @@ export default function BoardGrid() {
     try {
       const response = await BoardsService.getBoards()
       setBoards(response.data)
-
-      console.log(response.data)
     } catch (e) {
       if (e instanceof Error) {
-        console.log(e)
+        toast.error('Error', { description: e.message })
       }
     } finally {
       setIsLoading(false)

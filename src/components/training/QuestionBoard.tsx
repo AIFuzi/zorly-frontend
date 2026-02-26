@@ -1,4 +1,3 @@
-import Container from '@/src/components/Container'
 import { Button } from '@/src/components/ui/button'
 import { Input } from '@/src/components/ui/input'
 import { CornerDownLeft, Lightbulb, SkipForward } from 'lucide-react'
@@ -18,7 +17,7 @@ export default function QuestionBoard({}: QuestionBoardProps) {
             <Input
               placeholder="Type the answer here..."
               autoComplete="off"
-              className="border-primary/20 h-24 w-96 text-xl"
+              className="border-primary/20 h-24 text-xl lg:w-96"
             />
             <CornerDownLeft className="text-primary absolute top-0 right-0 -translate-x-4 translate-y-9" />
           </div>

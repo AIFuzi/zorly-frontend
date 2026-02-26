@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/src/components/ui/button'
+import { Input } from '@/src/components/ui/input'
 import { Skeleton } from '@/src/components/ui/skeleton'
 import {
   Table,
@@ -10,9 +11,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/src/components/ui/table'
+import WordsActionPopover from '@/src/components/words/WordsActionPopover'
 import { IWord } from '@/src/models'
 import { WordsService } from '@/src/service/words/words-service'
-import { ChevronDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -24,6 +25,8 @@ interface WordsTableProps {
 export default function WordsTable({ boardId, newWord }: WordsTableProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [words, setWords] = useState<IWord[]>([])
+
+  const [isEditMode, setIsEditMode] = useState(false)
 
   async function getWords() {
     setIsLoading(true)
@@ -79,10 +82,24 @@ export default function WordsTable({ boardId, newWord }: WordsTableProps) {
           : words.map(word => (
               <TableRow key={word.id}>
                 <TableCell className="text-lg font-light">
-                  {word.original}
+                  {isEditMode ? (
+                    <Input
+                      className="border-primary/30"
+                      value={word.original}
+                    />
+                  ) : (
+                    <span>{word.original}</span>
+                  )}
                 </TableCell>
                 <TableCell className="text-lg font-light">
-                  {word.translate}
+                  {isEditMode ? (
+                    <Input
+                      className="border-primary/30"
+                      value={word.translate}
+                    />
+                  ) : (
+                    <span>{word.translate}</span>
+                  )}
                 </TableCell>
                 <TableCell>
                   <div className="w-18 rounded-full bg-green-600/40 text-center">
@@ -99,9 +116,14 @@ export default function WordsTable({ boardId, newWord }: WordsTableProps) {
                   {word.wrongCount}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost">
-                    <ChevronDown />
-                  </Button>
+                  {isEditMode ? (
+                    <Button onClick={() => setIsEditMode(false)}>Apply</Button>
+                  ) : (
+                    <WordsActionPopover
+                      wordInfo={word}
+                      onEditMode={() => setIsEditMode(true)}
+                    />
+                  )}
                 </TableCell>
               </TableRow>
             ))}
