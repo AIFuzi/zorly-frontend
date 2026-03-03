@@ -3,11 +3,10 @@ import { Field, FieldLabel } from '@/src/components/ui/field'
 import { Input } from '@/src/components/ui/input'
 import { IWord } from '@/src/models'
 import { addWordSchema, addWordSchemaType } from '@/src/schemas'
-import { WordsService } from '@/src/service/words/words-service'
+import { WordsService } from '@/src/service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-
 
 interface CreateWordFormProps {
   boardId: string

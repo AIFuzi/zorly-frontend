@@ -1,4 +1,4 @@
-import Container from '@/src/components/Container'
+import MainPageLink from '@/src/components/MainPageLink'
 import { Metadata } from 'next'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -8,9 +8,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Home() {
-  return (
-    <Container>
-      <h1>Zorly</h1>
-    </Container>
-  )
+  return <MainPageLink />
 }

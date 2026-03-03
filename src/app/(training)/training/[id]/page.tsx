@@ -1,6 +1,6 @@
 import Container from '@/src/components/Container'
-import QuestionBoard from '@/src/components/training/QuestionBoard'
-import SessionProgress from '@/src/components/training/SessionProgress'
+import TrainingClientWrapper from '@/src/components/training/TrainingClientWrapper'
+import { TrainingService } from '@/src/service'
 import { Metadata } from 'next'
 
 interface PageProps {
@@ -13,14 +13,15 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default function Page({}: PageProps) {
+export default async function Page({ params }: PageProps) {
+  const { id } = await params
+
+  const response = await TrainingService.getTraining(id)
+
   return (
     <Container>
       <div className="m-auto lg:w-2/4">
-        <div className="space-y-4">
-          <SessionProgress />
-          <QuestionBoard />
-        </div>
+        <TrainingClientWrapper trainingData={response.data} />
       </div>
     </Container>
   )

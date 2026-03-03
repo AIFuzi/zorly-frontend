@@ -2,9 +2,11 @@ import BoardActionPopover from '@/src/components/boards/BoardActionPopover'
 import { Button } from '@/src/components/ui/button'
 import { Progress } from '@/src/components/ui/progress'
 import { IBoard } from '@/src/models'
-import { Globe, Play } from 'lucide-react'
+import { TrainingService } from '@/src/service'
+import { Globe, LoaderCircle, Play } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { CSSProperties } from 'react'
+import { CSSProperties, useState } from 'react'
+import { toast } from 'sonner'
 
 interface BoardsItemProps {
   boardInfo: IBoard
@@ -17,8 +19,26 @@ export default function BoardsItem({
 }: BoardsItemProps) {
   const router = useRouter()
 
-  // eslint-disable-next-line react-hooks/purity
+  const [isTrainingLoading, setIsTrainingLoading] = useState(false)
+
   const accuracy = Math.floor(Math.random() * 100)
+
+  async function generateTraining(boardId: string) {
+    //router.push(`/training/${boardInfo.id}`)
+    setIsTrainingLoading(true)
+
+    try {
+      const response = await TrainingService.generateTraining(boardId)
+
+      router.push(`/training/${response.data.id}`)
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error('Error', { description: e.message })
+      }
+    } finally {
+      setIsTrainingLoading(false)
+    }
+  }
 
   return (
     <div
@@ -87,7 +107,8 @@ export default function BoardsItem({
           />
         </div>
         <Button
-          onClick={() => router.push(`/training/${boardInfo.id}`)}
+          disabled={isTrainingLoading}
+          onClick={() => generateTraining(boardInfo.id)}
           className="bg-(--board-color) transition-colors hover:bg-(--board-color-hover)"
           style={
             {
@@ -96,7 +117,17 @@ export default function BoardsItem({
             } as CSSProperties
           }
         >
-          <Play /> Train
+          {isTrainingLoading ? (
+            <>
+              <LoaderCircle className="animate-spin" />
+              <span>Loading</span>
+            </>
+          ) : (
+            <>
+              <Play />
+              <span>Train</span>
+            </>
+          )}
         </Button>
       </div>
     </div>

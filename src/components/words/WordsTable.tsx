@@ -13,7 +13,7 @@ import {
 } from '@/src/components/ui/table'
 import WordsActionPopover from '@/src/components/words/WordsActionPopover'
 import { IWord } from '@/src/models'
-import { WordsService } from '@/src/service/words/words-service'
+import { WordsService } from '@/src/service'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -41,6 +41,10 @@ export default function WordsTable({ boardId, newWord }: WordsTableProps) {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  function removeWord(id: string) {
+    setWords(prevState => prevState.filter(w => w.id !== id))
   }
 
   useEffect(() => {
@@ -120,6 +124,7 @@ export default function WordsTable({ boardId, newWord }: WordsTableProps) {
                     <Button onClick={() => setIsEditMode(false)}>Apply</Button>
                   ) : (
                     <WordsActionPopover
+                      onDelete={id => removeWord(id)}
                       wordInfo={word}
                       onEditMode={() => setIsEditMode(true)}
                     />

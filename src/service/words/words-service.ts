@@ -24,4 +24,8 @@ export class WordsService {
       },
     })
   }
+
+  static async deleteWord(wordId: string): Promise<AxiosResponse<boolean>> {
+    return api.delete(`/word/${wordId}`)
+  }
 }
