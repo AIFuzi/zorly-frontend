@@ -12,7 +12,9 @@ interface TrainingClientWrapperProps {
 export default function TrainingClientWrapper({
   trainingData,
 }: TrainingClientWrapperProps) {
-  const [selectedAnswer, setSelectedAnswer] = useState(0)
+  const [selectedAnswer, setSelectedAnswer] = useState(
+    trainingData.currentIssue,
+  )
 
   function updateSelected(value: number) {
     setSelectedAnswer(value)

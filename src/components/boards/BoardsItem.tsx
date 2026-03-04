@@ -1,11 +1,11 @@
 import BoardActionPopover from '@/src/components/boards/BoardActionPopover'
 import { Button } from '@/src/components/ui/button'
 import { Progress } from '@/src/components/ui/progress'
-import { IBoard } from '@/src/models'
+import { IBoard, ITraining } from '@/src/models'
 import { TrainingService } from '@/src/service'
 import { Globe, LoaderCircle, Play } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { CSSProperties, useState } from 'react'
+import { CSSProperties, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 interface BoardsItemProps {
@@ -20,15 +20,21 @@ export default function BoardsItem({
   const router = useRouter()
 
   const [isTrainingLoading, setIsTrainingLoading] = useState(false)
+  const [notFinishedTraining, setNotFinishedTraining] = useState<ITraining>()
 
   const accuracy = Math.floor(Math.random() * 100)
 
-  async function generateTraining(boardId: string) {
-    //router.push(`/training/${boardInfo.id}`)
+  async function goToTraining() {
+    if (notFinishedTraining?.id) {
+      router.push(`/training/${notFinishedTraining.id}`)
+
+      return
+    }
+
     setIsTrainingLoading(true)
 
     try {
-      const response = await TrainingService.generateTraining(boardId)
+      const response = await TrainingService.generateTraining(boardInfo.id)
 
       router.push(`/training/${response.data.id}`)
     } catch (e) {
@@ -39,6 +45,28 @@ export default function BoardsItem({
       setIsTrainingLoading(false)
     }
   }
+
+  async function getNotFinishedTraining() {
+    setIsTrainingLoading(true)
+
+    try {
+      const response = await TrainingService.getNotFinishedTraining(
+        boardInfo.id,
+      )
+
+      setNotFinishedTraining(response.data)
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error('Error', { description: e.message })
+      }
+    } finally {
+      setIsTrainingLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    void getNotFinishedTraining()
+  }, [])
 
   return (
     <div
@@ -108,7 +136,7 @@ export default function BoardsItem({
         </div>
         <Button
           disabled={isTrainingLoading}
-          onClick={() => generateTraining(boardInfo.id)}
+          onClick={() => goToTraining()}
           className="bg-(--board-color) transition-colors hover:bg-(--board-color-hover)"
           style={
             {
@@ -125,7 +153,11 @@ export default function BoardsItem({
           ) : (
             <>
               <Play />
-              <span>Train</span>
+              <span>
+                {notFinishedTraining?.id
+                  ? 'Continue training'
+                  : 'Start training'}
+              </span>
             </>
           )}
         </Button>

@@ -6,8 +6,8 @@ import { ITraining } from '@/src/models'
 import { TrainingService } from '@/src/service'
 import { cn } from '@/src/shared/lib/utils'
 import { CornerDownLeft, Lightbulb, SkipForward } from 'lucide-react'
-import { KeyboardEvent, useState } from 'react'
-import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { KeyboardEvent, useEffect, useState } from 'react'
 
 interface QuestionBoardProps {
   trainingData: ITraining
@@ -20,19 +20,22 @@ export default function QuestionBoard({
   trainingData,
   onSelectedChange,
 }: QuestionBoardProps) {
+  const router = useRouter()
+
   const [status, setStatus] = useState<answer>('default')
   const [answerValue, setAnswerValue] = useState('')
 
   const [statistic, setStatistic] = useState({
-    correct: 0,
-    incorrect: 0,
-    skip: 0,
+    correct: trainingData.correctAnswers,
+    incorrect: trainingData.incorrectAnswers,
+    skip: trainingData.skippedAnswers,
   })
 
   const [selectedAnswer, setSelectedAnswer] = useState(
     trainingData.currentIssue,
   )
   const [isTimeout, setIsTimeout] = useState(false)
+  const [drawHint, setDrawHint] = useState(false)
 
   const trainingWords = trainingData.board.words
 
@@ -42,7 +45,7 @@ export default function QuestionBoard({
     incorrect: 'focus-visible:ring-red-500 focus-visible:border-red-700',
   }[status]
 
-  async function sendQuestion(key: KeyboardEvent<HTMLInputElement>) {
+  function sendQuestion(key: KeyboardEvent<HTMLInputElement>) {
     if (key.key !== 'Enter' || isTimeout || answerValue.trim().length <= 0)
       return
 
@@ -53,29 +56,49 @@ export default function QuestionBoard({
       answerValue.toLowerCase()
     ) {
       setStatus('correct')
-      setStatistic(prev => ({ ...prev, correct: prev.correct + 1 }))
+      setStatistic(prev => ({
+        ...prev,
+        correct: prev.correct + 1,
+      }))
     } else {
-      setStatus('incorrect')
-      setStatistic(prev => ({ ...prev, incorrect: prev.incorrect + 1 }))
-    }
+      setDrawHint(true)
 
-    await TrainingService.updateTraining(trainingData.id, {
-      correctAnswers: statistic.correct,
-      incorrectAnswers: statistic.incorrect,
-      skippedAnswers: statistic.skip,
-      currentIssue: selectedAnswer,
-      isFinished: false,
-    })
+      setStatus('incorrect')
+      setStatistic(prev => ({
+        ...prev,
+        incorrect: prev.incorrect + 1,
+      }))
+    }
 
     setTimeout(() => {
       setIsTimeout(false)
       setStatus('default')
       setAnswerValue('')
+      setDrawHint(false)
 
       setSelectedAnswer(Math.min(selectedAnswer + 1, trainingWords.length - 1))
+
+      if (selectedAnswer >= trainingWords.length - 1) {
+        router.push('statistics')
+      }
+
       onSelectedChange(selectedAnswer + 1)
     }, 1000)
   }
+
+  async function handleUpdate() {
+    await TrainingService.updateTraining(trainingData.id, {
+      correctAnswers: statistic.correct,
+      incorrectAnswers: statistic.incorrect,
+      skippedAnswers: statistic.skip,
+      currentIssue: selectedAnswer,
+      isFinished: selectedAnswer >= trainingWords.length - 1,
+    })
+  }
+
+  useEffect(() => {
+    void handleUpdate()
+  }, [selectedAnswer])
 
   return (
     <div className="bg-card w-full rounded-lg border">
@@ -89,19 +112,25 @@ export default function QuestionBoard({
           {trainingWords[selectedAnswer]?.original}
         </h1>
         <div className="flex flex-col items-center gap-y-4">
-          <div className="relative">
-            <Input
-              value={answerValue}
-              onChange={e => setAnswerValue(e.target.value)}
-              placeholder="Type the answer here..."
-              autoComplete="off"
-              className={cn(
-                'border-primary/20 h-24 text-xl lg:w-96',
-                inputColorRing,
-              )}
-              onKeyUp={e => sendQuestion(e)}
-            />
-            <CornerDownLeft className="text-primary absolute top-0 right-0 -translate-x-4 translate-y-9" />
+          <div className="flex flex-col items-center gap-y-4">
+            <div className="relative">
+              <Input
+                value={answerValue}
+                onChange={e => setAnswerValue(e.target.value)}
+                placeholder="Type the answer here..."
+                autoComplete="off"
+                className={cn(
+                  'border-primary/20 h-24 text-xl lg:w-96',
+                  inputColorRing,
+                )}
+                onKeyUp={e => sendQuestion(e)}
+              />
+              <CornerDownLeft className="text-primary absolute top-0 right-0 -translate-x-4 translate-y-9" />
+            </div>
+            <h1 className={`text-lg ${!drawHint && 'hidden'}`}>
+              <span className="text-muted-foreground">Correct answer: </span>
+              {trainingData.board.words[selectedAnswer].translate}
+            </h1>
           </div>
           <div className="flex items-center gap-x-4">
             <div className="bg-primary/10 rounded-lg border p-2">

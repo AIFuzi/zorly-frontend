@@ -16,6 +16,12 @@ export class TrainingService {
     return api.get(`/training/${trainingId}`)
   }
 
+  static async getNotFinishedTraining(
+    boardId: string,
+  ): Promise<AxiosResponse<ITraining>> {
+    return api.get(`/training/not-finished/${boardId}`)
+  }
+
   static async updateTraining(
     id: string,
     dto: UpdateTrainingDto,
