@@ -12,8 +12,13 @@ export class TrainingService {
 
   static async getTraining(
     trainingId: string,
+    limit: number,
   ): Promise<AxiosResponse<ITraining>> {
-    return api.get(`/training/${trainingId}`)
+    return api.get(`/training/${trainingId}`, {
+      params: {
+        limit,
+      },
+    })
   }
 
   static async getNotFinishedTraining(

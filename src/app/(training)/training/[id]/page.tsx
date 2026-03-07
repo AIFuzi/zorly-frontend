@@ -5,6 +5,9 @@ import { Metadata } from 'next'
 
 interface PageProps {
   params: { id: string } | Promise<{ id: string }>
+  searchParams:
+    | { hidewords: string; shuf: string; limit: number }
+    | Promise<{ hidewords: string; shuf: string; limit: number }>
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -13,15 +16,20 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function Page({ params, searchParams }: PageProps) {
   const { id } = await params
+  const { hidewords, shuf, limit } = await searchParams
 
-  const response = await TrainingService.getTraining(id)
+  const response = await TrainingService.getTraining(id, limit)
 
   return (
     <Container>
       <div className="m-auto lg:w-2/4">
-        <TrainingClientWrapper trainingData={response.data} />
+        <TrainingClientWrapper
+          shuf={shuf}
+          trainingData={response.data}
+          hide={hidewords}
+        />
       </div>
     </Container>
   )

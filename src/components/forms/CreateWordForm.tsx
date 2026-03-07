@@ -1,10 +1,13 @@
 import { formIds } from '@/src/components/forms/forms.type'
 import { Field, FieldLabel } from '@/src/components/ui/field'
 import { Input } from '@/src/components/ui/input'
+import { Textarea } from '@/src/components/ui/textarea'
 import { IWord } from '@/src/models'
 import { addWordSchema, addWordSchemaType } from '@/src/schemas'
 import { WordsService } from '@/src/service'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { forEach } from 'eslint-config-next'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -26,21 +29,40 @@ export default function CreateWordForm({
   })
 
   async function onSubmit(data: addWordSchemaType) {
-    try {
-      const response = await WordsService.createWord(
-        data.original,
-        data.translate,
-        boardId,
-      )
+    const la = data.translate.split('%=%')
+    la.map(async ls => {
+      const le = ls.split(';')
 
-      newWord(response.data)
-    } catch (e) {
-      if (e instanceof Error) {
-        toast.error('Error', { description: e.message })
+      try {
+        const response = await WordsService.createWord(le[0], le[1], boardId)
+
+        newWord(response.data)
+      } catch (e) {
+        if (e instanceof Error) {
+          toast.error('Error', { description: e.message })
+        }
+      } finally {
+        form.reset()
       }
-    } finally {
-      form.reset()
-    }
+    })
+
+    // console.log(la)
+
+    // try {
+    //   const response = await WordsService.createWord(
+    //     data.original,
+    //     data.translate,
+    //     boardId,
+    //   )
+    //
+    //   newWord(response.data)
+    // } catch (e) {
+    //   if (e instanceof Error) {
+    //     toast.error('Error', { description: e.message })
+    //   }
+    // } finally {
+    //   form.reset()
+    // }
   }
 
   return (
@@ -63,13 +85,27 @@ export default function CreateWordForm({
           </Field>
         )}
       />
+      {/*<Controller*/}
+      {/*  control={form.control}*/}
+      {/*  name="translate"*/}
+      {/*  render={({ field, fieldState }) => (*/}
+      {/*    <Field data-invalid={fieldState.invalid}>*/}
+      {/*      <FieldLabel>Word translate</FieldLabel>*/}
+      {/*      <Input*/}
+      {/*        {...field}*/}
+      {/*        id={field.name}*/}
+      {/*        autoComplete="off"*/}
+      {/*      />*/}
+      {/*    </Field>*/}
+      {/*  )}*/}
+      {/*/>*/}
       <Controller
         control={form.control}
         name="translate"
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
             <FieldLabel>Word translate</FieldLabel>
-            <Input
+            <Textarea
               {...field}
               id={field.name}
               autoComplete="off"

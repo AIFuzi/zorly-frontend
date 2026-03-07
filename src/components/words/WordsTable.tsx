@@ -107,7 +107,14 @@ export default function WordsTable({ boardId, newWord }: WordsTableProps) {
                 </TableCell>
                 <TableCell>
                   <div className="w-18 rounded-full bg-green-600/40 text-center">
-                    <h4 className="text-green-400">98%</h4>
+                    <h4 className="text-green-400">
+                      {Math.round(
+                        (word.correctCount /
+                          (word.correctCount + word.wrongCount)) *
+                          100,
+                      )}
+                      %
+                    </h4>
                   </div>
                 </TableCell>
                 <TableCell className="text-lg font-light">

@@ -28,4 +28,8 @@ export class WordsService {
   static async deleteWord(wordId: string): Promise<AxiosResponse<boolean>> {
     return api.delete(`/word/${wordId}`)
   }
+
+  static async updateWordStats(id: string, isCorrect: boolean) {
+    return api.patch(`/word/${id}`, { isCorrect })
+  }
 }
